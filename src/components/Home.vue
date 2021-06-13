@@ -19,7 +19,8 @@
             :unique-opened="true" 
             :collapse="isCollapse"
             :collapse-transition="false"
-            :router="true">
+            :router="true"
+            :default-active="activePath">
             <!-- 一级菜单 -->
             <el-submenu :index="item.id + ''" v-for="item in menuList" :key="item.id">
               <!-- 一级菜单模板 -->
@@ -30,7 +31,10 @@
                 <span>{{item.authName}}</span>
               </template>
               <!-- 二级菜单 -->
-              <el-menu-item :index="'/' + subItem.path" v-for="subItem in item.children" :key="subItem.id">
+              <el-menu-item v-for="subItem in item.children" 
+                :key="subItem.id"
+                :index="'/' + subItem.path"
+                @click="saveNavState('/' + subItem.path)">
                 <template #title>
                   <!-- 图标 -->
                   <i class="el-icon-menu"></i>
@@ -61,11 +65,14 @@ export default {
         '145': 'el-icon-s-marketing',
       },
       // 菜单是否折叠
-      isCollapse: false
+      isCollapse: false,
+      // 被选中的path
+      activePath: ''
     }
   },
   created() {
     this.getMenuList()
+    this.activePath = window.sessionStorage.getItem('activePath')
   },
   methods: {
     logout() {
@@ -84,6 +91,10 @@ export default {
     },
     toggleCollapse() {
       this.isCollapse = !this.isCollapse
+    },
+    saveNavState(activePath) {
+      this.activePath = activePath
+      window.sessionStorage.setItem('activePath', activePath)
     }
   },
 }
