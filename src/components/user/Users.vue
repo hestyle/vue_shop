@@ -275,7 +275,7 @@ export default {
       })
     },
     async showEditDialog(id) {
-      const { data: res } = await this.$http.get('users/' + id, this.addForm)
+      const { data: res } = await this.$http.get('users/' + id)
       if (res.meta.status !== 200) {
         return this.$message.error(res.meta.msg)
       }
